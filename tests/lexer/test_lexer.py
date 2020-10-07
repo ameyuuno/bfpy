@@ -2,7 +2,7 @@ import typing as t
 
 import pytest
 
-from bfpy.lexer.lexer import LexerImpl
+from bfpy.lexer.lexer import LexerImpl, LexerError
 from bfpy.lexer.token import Token, TokenType
 
 
@@ -49,3 +49,17 @@ class TestLexerImpl:
         actual_tokens = lexer.tokenize(text)
 
         assert actual_tokens == expected_tokens
+
+    @pytest.mark.parametrize("text, unknown_lexeme", [
+        pytest.param("p", "p", id="Unknown lexeme: letter"),
+        pytest.param("=", "=", id="Unknown lexeme: sign"),
+        pytest.param("+- < =  .--", "=", id="Unknown lexeme: letter among known lexemes"),
+        pytest.param("++(-+>>).--", "(", id="Unknown lexeme: wrong bracket type for loop"),
+    ])
+    def test_tokenize_text_with_unknown_lexemes(self, text: t.Text, unknown_lexeme: t.Text) -> None:
+        lexer = LexerImpl()
+
+        with pytest.raises(LexerError) as exc_info:
+            lexer.tokenize(text)
+
+        assert f"Unknown token (lexeme={unknown_lexeme})" == str(exc_info.value)
