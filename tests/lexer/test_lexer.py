@@ -3,22 +3,22 @@ import typing as t
 import pytest
 
 from bfpy.lexer.lexer import LexerImpl, LexerError
-from bfpy.lexer.token import Token, TokenType
+from bfpy.lexer.token import Token, TokenType, Lexeme
 
 
 class TestLexerImpl:
-    TOKEN_LSHIFT = Token("<", TokenType.LSHIFT)
-    TOKEN_RSHIFT = Token(">", TokenType.RSHIFT)
-    TOKEN_INC = Token("+", TokenType.INC)
-    TOKEN_DEC = Token("-", TokenType.DEC)
-    TOKEN_RB = Token(",", TokenType.RB)
-    TOKEN_WB = Token(".", TokenType.WB)
-    TOKEN_OLOOP = Token("[", TokenType.OLOOP)
-    TOKEN_CLOOP = Token("]", TokenType.CLOOP)
-    TOKEN_WS_SPACE = Token(" ", TokenType.WHITESPACE)
-    TOKEN_WS_TAB = Token("\t", TokenType.WHITESPACE)
-    TOKEN_WS_NL = Token("\n", TokenType.WHITESPACE)
-    TOKEN_EOF = Token("", TokenType.EOF)
+    TOKEN_LSHIFT = Token(Lexeme("<"), TokenType.LSHIFT)
+    TOKEN_RSHIFT = Token(Lexeme(">"), TokenType.RSHIFT)
+    TOKEN_INC = Token(Lexeme("+"), TokenType.INC)
+    TOKEN_DEC = Token(Lexeme("-"), TokenType.DEC)
+    TOKEN_RB = Token(Lexeme(","), TokenType.RB)
+    TOKEN_WB = Token(Lexeme("."), TokenType.WB)
+    TOKEN_OLOOP = Token(Lexeme("["), TokenType.OLOOP)
+    TOKEN_CLOOP = Token(Lexeme("]"), TokenType.CLOOP)
+    TOKEN_WS_SPACE = Token(Lexeme(" "), TokenType.WHITESPACE)
+    TOKEN_WS_TAB = Token(Lexeme("\t"), TokenType.WHITESPACE)
+    TOKEN_WS_NL = Token(Lexeme("\n"), TokenType.WHITESPACE)
+    TOKEN_EOF = Token(Lexeme(""), TokenType.EOF)
 
     @pytest.mark.parametrize("text, expected_tokens", [
         pytest.param("<", [TOKEN_LSHIFT, TOKEN_EOF], id="'<'"),
