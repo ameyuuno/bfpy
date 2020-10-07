@@ -1,4 +1,4 @@
-__all__ = ["TokenType", "Token"]
+__all__ = ["Lexeme", "TokenType", "Token"]
 
 import dataclasses as dc
 import enum
