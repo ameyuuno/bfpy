@@ -1,4 +1,4 @@
-### Python
+### Python ###
 __pycache__/
 *.py[cod]
 
@@ -16,9 +16,12 @@ cover/
 # mypy
 .mypy_cache/
 
-### macOS
+### macOS ###
 # General
 .DS_Store
 
-### JetBrains
+### JetBrains ###
 .idea/
+
+### Project Files ###
+.local/
