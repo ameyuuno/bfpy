@@ -31,7 +31,7 @@ exclude_lines = [
 show_missing = true
 
 [tool.coverage.html]
-directory = "./reports/test-coverage/"
+directory = "./.local/reports/test-coverage/"
 
 [build-system]
 requires = ["poetry>=0.12"]
