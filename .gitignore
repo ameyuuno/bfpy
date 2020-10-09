@@ -2,12 +2,11 @@
 __pycache__/
 *.py[cod]
 
-htmlcov/
 .coverage
 .coverage.*
 .cache
 .pytest_cache/
-cover/
+reports/test-coverage/
 
 # Environments
 .env
