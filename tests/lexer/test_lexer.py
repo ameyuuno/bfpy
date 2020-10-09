@@ -2,7 +2,7 @@ import typing as t
 
 import pytest
 
-from bfpy.lexer.lexer import LexerImpl, LexerError
+from bfpy.lexer.lexer import LexerImpl, LexicalError
 from bfpy.lexer.token import Token, TokenType, Lexeme
 
 
@@ -59,7 +59,7 @@ class TestLexerImpl:
     def test_tokenize_text_with_unknown_lexemes(self, text: t.Text, unknown_lexeme: t.Text) -> None:
         lexer = LexerImpl()
 
-        with pytest.raises(LexerError) as exc_info:
+        with pytest.raises(LexicalError) as exc_info:
             lexer.tokenize(text)
 
         assert f"Unknown token (lexeme={unknown_lexeme})" == str(exc_info.value)

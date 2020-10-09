@@ -1,4 +1,4 @@
-__all__ = ["Lexer", "LexerImpl", "LexerError"]
+__all__ = ["Lexer", "LexerImpl", "LexicalError"]
 
 import abc
 import typing as t
@@ -6,7 +6,7 @@ import typing as t
 from bfpy.lexer.token import Token, TokenType, Lexeme
 
 
-class LexerError(Exception):
+class LexicalError(Exception):
     pass
 
 
@@ -40,4 +40,4 @@ class LexerImpl(Lexer):
             return self.__TOKENS[char]
 
         except KeyError as exc:
-            raise LexerError(f"Unknown token (lexeme={char})") from exc
+            raise LexicalError(f"Unknown token (lexeme={char})") from exc
