@@ -10,7 +10,7 @@ class LexicalError(Exception):
     pass
 
 
-class Lexer(abc.ABC):
+class Lexer(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def tokenize(self, text: t.Text) -> t.Sequence[Token]: ...
 
