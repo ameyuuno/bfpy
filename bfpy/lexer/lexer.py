@@ -16,18 +16,18 @@ class Lexer(abc.ABC):
 
 
 class LexerImpl(Lexer):
-    __TOKENS: t.Mapping[t.Text, Token] = {
-        "<": Token(Lexeme("<"), TokenType.LSHIFT),
-        ">": Token(Lexeme(">"), TokenType.RSHIFT),
-        "+": Token(Lexeme("+"), TokenType.INC),
-        "-": Token(Lexeme("-"), TokenType.DEC),
-        ",": Token(Lexeme(","), TokenType.RB),
-        ".": Token(Lexeme("."), TokenType.WB),
-        "[": Token(Lexeme("["), TokenType.OLOOP),
-        "]": Token(Lexeme("]"), TokenType.CLOOP),
-        " ": Token(Lexeme(" "), TokenType.WHITESPACE),
-        "\t": Token(Lexeme("\t"), TokenType.WHITESPACE),
-        "\n": Token(Lexeme("\n"), TokenType.WHITESPACE),
+    __TOKENS: t.Mapping[t.Text, TokenType] = {
+        "<": TokenType.LSHIFT,
+        ">": TokenType.RSHIFT,
+        "+": TokenType.INC,
+        "-": TokenType.DEC,
+        ",": TokenType.RB,
+        ".": TokenType.WB,
+        "[": TokenType.OLOOP,
+        "]": TokenType.CLOOP,
+        " ": TokenType.WHITESPACE,
+        "\t": TokenType.WHITESPACE,
+        "\n": TokenType.WHITESPACE,
     }
 
     __TOKEN_EOF = Token(Lexeme(""), TokenType.EOF)
@@ -37,7 +37,8 @@ class LexerImpl(Lexer):
 
     def __parse_token(self, char: t.Text) -> Token:
         try:
-            return self.__TOKENS[char]
-
+            token_type = self.__TOKENS[char]
         except KeyError as exc:
             raise LexicalError(f"Unknown token (lexeme={char})") from exc
+
+        return Token(Lexeme(char), token_type)
