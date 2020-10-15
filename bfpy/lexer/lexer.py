@@ -16,7 +16,7 @@ class Lexer(abc.ABC):
 
 
 class LexerImpl(Lexer):
-    __TOKENS: t.Mapping[t.Text, TokenType] = {
+    __TOKENS_TYPES: t.Mapping[t.Text, TokenType] = {
         "<": TokenType.LSHIFT,
         ">": TokenType.RSHIFT,
         "+": TokenType.INC,
@@ -37,7 +37,7 @@ class LexerImpl(Lexer):
 
     def __parse_token(self, char: t.Text) -> Token:
         try:
-            token_type = self.__TOKENS[char]
+            token_type = self.__TOKENS_TYPES[char]
         except KeyError as exc:
             raise LexicalError(f"Unknown token (lexeme={char})") from exc
 
