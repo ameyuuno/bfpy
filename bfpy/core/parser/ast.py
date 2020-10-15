@@ -3,7 +3,7 @@ __all__ = ["AstNode", "ListNode", "LeafNode"]
 import dataclasses as dc
 import typing as t
 
-from bfpy.lexer.token import Token
+from bfpy.core.lexer.token import Token
 
 
 @dc.dataclass(frozen=True)

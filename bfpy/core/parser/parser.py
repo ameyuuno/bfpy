@@ -3,8 +3,8 @@ __all__ = ["SyntacticError", "Parser", "ParserImpl"]
 import abc
 import typing as t
 
-from bfpy.lexer.token import Token, TokenType
-from bfpy.parser.ast import AstNode, ListNode, LeafNode
+from bfpy.core.lexer.token import Token, TokenType
+from bfpy.core.parser.ast import AstNode, ListNode, LeafNode
 
 
 class SyntacticError(Exception):

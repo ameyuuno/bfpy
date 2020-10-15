@@ -1,9 +1,10 @@
 import pytest
 
-from bfpy.il.operation import Operation, CompositeOperation, Addition, Subtraction, LeftShift, RightShift, WriteByte
-from bfpy.il.translator import TranslatorImpl
-from bfpy.lexer.token import Token, Lexeme, TokenType
-from bfpy.parser.ast import AstNode, ListNode, LeafNode
+from bfpy.core.il.operation import (Operation, CompositeOperation, Addition, Subtraction, LeftShift, RightShift,
+                                    WriteByte)
+from bfpy.core.il.translator import TranslatorImpl
+from bfpy.core.lexer.token import Token, Lexeme, TokenType
+from bfpy.core.parser.ast import AstNode, ListNode, LeafNode
 
 
 class TestTranslatorImpl:

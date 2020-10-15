@@ -1,6 +1,6 @@
 import pytest
 
-from bfpy.parser.ast import AstNode
+from bfpy.core.parser.ast import AstNode
 
 
 class TestAstNode:

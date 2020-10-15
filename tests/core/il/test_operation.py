@@ -1,6 +1,6 @@
 import pytest
 
-from bfpy.il.operation import Operation
+from bfpy.core.il.operation import Operation
 
 
 class TestOperation:

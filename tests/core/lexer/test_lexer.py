@@ -2,8 +2,8 @@ import typing as t
 
 import pytest
 
-from bfpy.lexer.lexer import LexerImpl, LexicalError
-from bfpy.lexer.token import Token, TokenType, Lexeme
+from bfpy.core.lexer.lexer import LexerImpl, LexicalError
+from bfpy.core.lexer.token import Token, TokenType, Lexeme
 
 
 class TestLexerImpl:

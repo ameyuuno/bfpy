@@ -2,8 +2,8 @@ __all__ = ["Translator", "TranslatorImpl"]
 
 import abc
 
-from bfpy.il.operation import Operation
-from bfpy.parser.ast import AstNode
+from bfpy.core.il.operation import Operation
+from bfpy.core.parser.ast import AstNode
 
 
 class Translator(metaclass=abc.ABCMeta):

@@ -2,9 +2,9 @@ import typing as t
 
 import pytest
 
-from bfpy.lexer.token import Token, Lexeme, TokenType
-from bfpy.parser.ast import AstNode, ListNode, LeafNode
-from bfpy.parser.parser import ParserImpl, SyntacticError
+from bfpy.core.lexer.token import Token, Lexeme, TokenType
+from bfpy.core.parser.ast import AstNode, ListNode, LeafNode
+from bfpy.core.parser.parser import ParserImpl, SyntacticError
 
 
 class TestParserImpl:
