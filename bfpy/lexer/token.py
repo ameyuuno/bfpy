@@ -18,8 +18,6 @@ class TokenType(enum.Enum):
     WB = enum.auto()
     OLOOP = enum.auto()
     CLOOP = enum.auto()
-    WHITESPACE = enum.auto()
-    EOF = enum.auto()
 
 
 @dc.dataclass(frozen=True)
