@@ -1,12 +1,15 @@
-__all__ = ["Translator", "TranslatorImpl"]
+__all__ = ["Translator", "TranslatorImpl", "TranslationError"]
 
 import abc
-import typing as t
 
-from bfpy.core.il.operation import Operation, CompositeOperation, Addition, Subtraction, LeftShift, RightShift, \
-    ReadByte, WriteByte
+from bfpy.core.il.operation import (Operation, CompositeOperation, Addition, Subtraction, LeftShift, RightShift,
+                                    ReadByte, WriteByte)
 from bfpy.core.lexer.token import TokenType
 from bfpy.core.parser.ast import AstNode, LeafNode, ListNode
+
+
+class TranslationError(Exception):
+    pass
 
 
 class Translator(metaclass=abc.ABCMeta):
@@ -16,44 +19,24 @@ class Translator(metaclass=abc.ABCMeta):
 
 class TranslatorImpl(Translator):
     def translate(self, ast: AstNode) -> Operation:
-        ss = []
-        sss = []
+        if isinstance(ast, ListNode):
+            return CompositeOperation([self.translate(node) for node in ast.nodes])
 
-        node_level = [ast]  # queue
-        node_levels = []  # stack
+        elif isinstance(ast, LeafNode):
+            if ast.token.type_ is TokenType.INC:
+                return Addition(1)
+            elif ast.token.type_ is TokenType.DEC:
+                return Subtraction(1)
+            elif ast.token.type_ is TokenType.LSHIFT:
+                return LeftShift(1)
+            elif ast.token.type_ is TokenType.RSHIFT:
+                return RightShift(1)
+            elif ast.token.type_ is TokenType.RB:
+                return ReadByte()
+            elif ast.token.type_ is TokenType.WB:
+                return WriteByte()
+            else:
+                raise TranslationError(f"Unknown type of token in AST leaf node (token={ast.token})")
 
-        while True:
-            if len(node_level) == 0:
-                if len(node_levels) == 0:
-                    break
-
-                node_level = node_levels.pop(-1)
-                s = CompositeOperation(ss)
-                ss = sss.pop(-1)
-                ss.append(s)
-                continue
-
-            node = node_level.pop(0)
-
-            if isinstance(node, ListNode):
-                node_levels.append(node_level)
-                sss.append(ss)
-
-                node_level = list(node.nodes)
-                ss = []
-
-            elif isinstance(node, LeafNode):
-                if node.token.type_ is TokenType.INC:
-                    ss.append(Addition(1))
-                elif node.token.type_ is TokenType.DEC:
-                    ss.append(Subtraction(1))
-                elif node.token.type_ is TokenType.LSHIFT:
-                    ss.append(LeftShift(1))
-                elif node.token.type_ is TokenType.RSHIFT:
-                    ss.append(RightShift(1))
-                elif node.token.type_ is TokenType.RB:
-                    ss.append(ReadByte())
-                elif node.token.type_ is TokenType.WB:
-                    ss.append(WriteByte())
-
-        return ss[0]
+        else:
+            raise TranslationError(f"Unknown type of AST node (ast={ast}).")
