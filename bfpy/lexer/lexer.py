@@ -30,10 +30,8 @@ class LexerImpl(Lexer):
         "\n": TokenType.WHITESPACE,
     }
 
-    __TOKEN_EOF = Token(Lexeme(""), TokenType.EOF)
-
     def tokenize(self, text: t.Text) -> t.Sequence[Token]:
-        return [*(self.__parse_token(char) for char in text), self.__TOKEN_EOF]
+        return [self.__parse_token(char) for char in text]
 
     def __parse_token(self, char: t.Text) -> Token:
         try:
