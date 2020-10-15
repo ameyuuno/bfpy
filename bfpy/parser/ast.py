@@ -8,7 +8,9 @@ from bfpy.lexer.token import Token
 
 @dc.dataclass(frozen=True)
 class AstNode:
-    pass
+    def __post_init__(self) -> None:
+        if self.__class__ == AstNode:
+            raise TypeError("Can not create an instance of class `AstNode`")
 
 
 @dc.dataclass(frozen=True)
