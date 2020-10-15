@@ -16,7 +16,7 @@ radon = "^4.3.2"
 
 [tool.pytest.ini_options]
 addopts = """--verbose --full-trace --color=yes --code-highlight=yes
-             --cov=./bfpy/ --cov-report=html --cov-report=term --no-cov-on-fail"""
+             --cov=./bfpy/ --cov-report=html --cov-report=term"""
 console_output_style = "count"
 testpaths = ["tests"]
 
