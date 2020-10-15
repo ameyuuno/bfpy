@@ -25,13 +25,10 @@ class LexerImpl(Lexer):
         ".": TokenType.WB,
         "[": TokenType.OLOOP,
         "]": TokenType.CLOOP,
-        " ": TokenType.WHITESPACE,
-        "\t": TokenType.WHITESPACE,
-        "\n": TokenType.WHITESPACE,
     }
 
     def tokenize(self, text: t.Text) -> t.Sequence[Token]:
-        return [self.__parse_token(char) for char in text]
+        return [self.__parse_token(char) for char in text if not char.isspace()]
 
     def __parse_token(self, char: t.Text) -> Token:
         try:
