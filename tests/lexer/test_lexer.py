@@ -17,25 +17,82 @@ class TestLexerImpl:
     CLOOP = Token(Lexeme("]"), TokenType.CLOOP)
 
     @pytest.mark.parametrize("text, expected_tokens", [
-        pytest.param("<", [LSHIFT], id="'<'"),
-        pytest.param(">", [RSHIFT], id="'>'"),
-        pytest.param("+", [INC], id="'+'"),
-        pytest.param("-", [DEC], id="'-'"),
-        pytest.param(",", [RB], id="','"),
-        pytest.param(".", [WB], id="'.'"),
-        pytest.param("[", [OLOOP], id="'['"),
-        pytest.param("]", [CLOOP], id="']'"),
-        pytest.param(" ", [], id="' '"),
-        pytest.param("\t", [], id="'\t'"),
-        pytest.param("\n", [], id="'\n'"),
-        pytest.param("", [], id="'EOF'"),
-        pytest.param("++", [INC, INC], id="'++'"),
-        pytest.param("+ +", [INC, INC], id="'+ +'"),
-        pytest.param("+[-[<<[+[--->]-[<<<]]]>>>-]>-.",
-                     [INC, OLOOP, DEC, OLOOP, LSHIFT, LSHIFT, OLOOP, INC, OLOOP, DEC, DEC, DEC, RSHIFT, CLOOP, DEC,
-                      OLOOP, LSHIFT, LSHIFT, LSHIFT, CLOOP, CLOOP, CLOOP, RSHIFT, RSHIFT, RSHIFT, DEC, CLOOP, RSHIFT,
-                      DEC, WB],
-                     id="'+[-[<<[+[--->]-[<<<]]]>>>-]>-.'"),
+        pytest.param(
+            "<",
+            [LSHIFT],
+            id="'<'"
+        ),
+        pytest.param(
+            ">",
+            [RSHIFT],
+            id="'>'"
+        ),
+        pytest.param(
+            "+",
+            [INC],
+            id="'+'"
+        ),
+        pytest.param(
+            "-",
+            [DEC],
+            id="'-'"
+        ),
+        pytest.param(
+            ",",
+            [RB],
+            id="','"
+        ),
+        pytest.param(
+            ".",
+            [WB],
+            id="'.'"
+        ),
+        pytest.param(
+            "[",
+            [OLOOP],
+            id="'['"
+        ),
+        pytest.param(
+            "]",
+            [CLOOP],
+            id="']'"
+        ),
+        pytest.param(
+            " ",
+            [],
+            id="' '"
+        ),
+        pytest.param(
+            "\t",
+            [],
+            id="'\t'"
+        ),
+        pytest.param(
+            "\n",
+            [],
+            id="'\n'"
+        ),
+        pytest.param(
+            "",
+            [],
+            id="''"
+        ),
+        pytest.param(
+            "++",
+            [INC, INC],
+            id="'++'"
+        ),
+        pytest.param(
+            "+ +",
+            [INC, INC],
+            id="'+ +'"
+        ),
+        pytest.param(
+            "+[-[<<[+[--->]-[<<<]]]>>>-]>-.",
+            [INC, OLOOP, DEC, OLOOP, LSHIFT, LSHIFT, OLOOP, INC, OLOOP, DEC, DEC, DEC, RSHIFT, CLOOP, DEC, OLOOP,
+             LSHIFT, LSHIFT, LSHIFT, CLOOP, CLOOP, CLOOP, RSHIFT, RSHIFT, RSHIFT, DEC, CLOOP, RSHIFT, DEC, WB],
+            id="'+[-[<<[+[--->]-[<<<]]]>>>-]>-.'"
+        ),
     ])
     def test_tokenize(self, text: t.Text, expected_tokens: t.Sequence[Token]) -> None:
         lexer = LexerImpl()
