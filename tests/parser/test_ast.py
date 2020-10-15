@@ -8,4 +8,4 @@ class TestAstNode:
         with pytest.raises(TypeError) as exc_info:
             AstNode()
 
-        assert "Can not create an instance of class `AstNode`" == str(exc_info)
+        assert "Can not create an instance of class `AstNode`" == str(exc_info.value)
