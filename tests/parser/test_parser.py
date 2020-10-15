@@ -111,4 +111,4 @@ class TestParserImpl:
         with pytest.raises(SyntacticError) as exc_info:
             parser.parse(tokens)
 
-        assert expected_error in str(exc_info)
+        assert expected_error in str(exc_info.value)
