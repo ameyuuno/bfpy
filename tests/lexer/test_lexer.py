@@ -15,32 +15,28 @@ class TestLexerImpl:
     TOKEN_WB = Token(Lexeme("."), TokenType.WB)
     TOKEN_OLOOP = Token(Lexeme("["), TokenType.OLOOP)
     TOKEN_CLOOP = Token(Lexeme("]"), TokenType.CLOOP)
-    TOKEN_WS_SPACE = Token(Lexeme(" "), TokenType.WHITESPACE)
-    TOKEN_WS_TAB = Token(Lexeme("\t"), TokenType.WHITESPACE)
-    TOKEN_WS_NL = Token(Lexeme("\n"), TokenType.WHITESPACE)
-    TOKEN_EOF = Token(Lexeme(""), TokenType.EOF)
 
     @pytest.mark.parametrize("text, expected_tokens", [
-        pytest.param("<", [TOKEN_LSHIFT, TOKEN_EOF], id="'<'"),
-        pytest.param(">", [TOKEN_RSHIFT, TOKEN_EOF], id="'>'"),
-        pytest.param("+", [TOKEN_INC, TOKEN_EOF], id="'+'"),
-        pytest.param("-", [TOKEN_DEC, TOKEN_EOF], id="'-'"),
-        pytest.param(",", [TOKEN_RB, TOKEN_EOF], id="','"),
-        pytest.param(".", [TOKEN_WB, TOKEN_EOF], id="'.'"),
-        pytest.param("[", [TOKEN_OLOOP, TOKEN_EOF], id="'['"),
-        pytest.param("]", [TOKEN_CLOOP, TOKEN_EOF], id="']'"),
-        pytest.param(" ", [TOKEN_WS_SPACE, TOKEN_EOF], id="' '"),
-        pytest.param("\t", [TOKEN_WS_TAB, TOKEN_EOF], id="'\t'"),
-        pytest.param("\n", [TOKEN_WS_NL, TOKEN_EOF], id="'\n'"),
-        pytest.param("", [TOKEN_EOF], id="'EOF'"),
-        pytest.param("++", [TOKEN_INC, TOKEN_INC, TOKEN_EOF], id="'++'"),
-        pytest.param("+ +", [TOKEN_INC, TOKEN_WS_SPACE, TOKEN_INC, TOKEN_EOF], id="'+ +'"),
+        pytest.param("<", [TOKEN_LSHIFT], id="'<'"),
+        pytest.param(">", [TOKEN_RSHIFT], id="'>'"),
+        pytest.param("+", [TOKEN_INC], id="'+'"),
+        pytest.param("-", [TOKEN_DEC], id="'-'"),
+        pytest.param(",", [TOKEN_RB], id="','"),
+        pytest.param(".", [TOKEN_WB], id="'.'"),
+        pytest.param("[", [TOKEN_OLOOP], id="'['"),
+        pytest.param("]", [TOKEN_CLOOP], id="']'"),
+        pytest.param(" ", [], id="' '"),
+        pytest.param("\t", [], id="'\t'"),
+        pytest.param("\n", [], id="'\n'"),
+        pytest.param("", [], id="'EOF'"),
+        pytest.param("++", [TOKEN_INC, TOKEN_INC], id="'++'"),
+        pytest.param("+ +", [TOKEN_INC, TOKEN_INC], id="'+ +'"),
         pytest.param("+[-[<<[+[--->]-[<<<]]]>>>-]>-.",
                      [TOKEN_INC, TOKEN_OLOOP, TOKEN_DEC, TOKEN_OLOOP, TOKEN_LSHIFT, TOKEN_LSHIFT, TOKEN_OLOOP,
                       TOKEN_INC, TOKEN_OLOOP, TOKEN_DEC, TOKEN_DEC, TOKEN_DEC, TOKEN_RSHIFT, TOKEN_CLOOP, TOKEN_DEC,
                       TOKEN_OLOOP, TOKEN_LSHIFT, TOKEN_LSHIFT, TOKEN_LSHIFT, TOKEN_CLOOP, TOKEN_CLOOP, TOKEN_CLOOP,
                       TOKEN_RSHIFT, TOKEN_RSHIFT, TOKEN_RSHIFT, TOKEN_DEC, TOKEN_CLOOP, TOKEN_RSHIFT, TOKEN_DEC,
-                      TOKEN_WB, TOKEN_EOF],
+                      TOKEN_WB],
                      id="'+[-[<<[+[--->]-[<<<]]]>>>-]>-.'"),
     ])
     def test_tokenize(self, text: t.Text, expected_tokens: t.Sequence[Token]) -> None:
