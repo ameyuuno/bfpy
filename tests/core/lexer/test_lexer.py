@@ -2,11 +2,11 @@ import typing as t
 
 import pytest
 
-from bfpy.core.lexer.lexer import LexerImpl, LexicalError
+from bfpy.core.lexer.lexer import LexicalError, Lexer
 from bfpy.core.lexer.token import Token, TokenType, Lexeme
 
 
-class TestLexerImpl:
+class TestLexer:
     LSHIFT = Token(Lexeme("<"), TokenType.LSHIFT)
     RSHIFT = Token(Lexeme(">"), TokenType.RSHIFT)
     INC = Token(Lexeme("+"), TokenType.INC)
@@ -94,9 +94,7 @@ class TestLexerImpl:
             id="'+[-[<<[+[--->]-[<<<]]]>>>-]>-.'"
         ),
     ])
-    def test_tokenize(self, text: t.Text, expected_tokens: t.Sequence[Token]) -> None:
-        lexer = LexerImpl()
-
+    def test_tokenize(self, lexer: Lexer, text: t.Text, expected_tokens: t.Sequence[Token]) -> None:
         actual_tokens = lexer.tokenize(text)
 
         assert actual_tokens == expected_tokens
@@ -107,9 +105,7 @@ class TestLexerImpl:
         pytest.param("+- < =  .--", "=", id="Unknown lexeme: letter among known lexemes"),
         pytest.param("++(-+>>).--", "(", id="Unknown lexeme: wrong bracket type for loop"),
     ])
-    def test_tokenize_text_with_unknown_lexemes(self, text: t.Text, unknown_lexeme: t.Text) -> None:
-        lexer = LexerImpl()
-
+    def test_tokenize_text_with_unknown_lexemes(self, lexer: Lexer, text: t.Text, unknown_lexeme: t.Text) -> None:
         with pytest.raises(LexicalError) as exc_info:
             lexer.tokenize(text)
 
