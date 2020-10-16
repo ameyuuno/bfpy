@@ -4,12 +4,12 @@ import pytest
 
 from bfpy.core.il.operation import (Operation, CompositeOperation, Addition, Subtraction, LeftShift, RightShift,
                                     WriteByte, ReadByte)
-from bfpy.core.il.translator import TranslatorImpl, TranslationError
+from bfpy.core.il.translator import Translator, TranslationError
 from bfpy.core.lexer.token import Token, Lexeme, TokenType
 from bfpy.core.parser.ast import AstNode, ListNode, LeafNode
 
 
-class TestTranslatorImpl:
+class TestTranslator:
     LSHIFT = Token(Lexeme("<"), TokenType.LSHIFT)
     RSHIFT = Token(Lexeme(">"), TokenType.RSHIFT)
     INC = Token(Lexeme("+"), TokenType.INC)
@@ -121,27 +121,22 @@ class TestTranslatorImpl:
             id="'+[-[<<[+[-->]-[<<<]]]>>>-]>-.'",
         ),
     ])
-    def test_translate(self, ast: AstNode, expected_operation: Operation) -> None:
-        translator = TranslatorImpl()
-
+    def test_translate(self, translator: Translator, ast: AstNode, expected_operation: Operation) -> None:
         actual_operation = translator.translate(ast)
 
         assert actual_operation == expected_operation
 
-    def test_translate_unknown_ast_node(self) -> None:
+    def test_translate_unknown_ast_node(self, translator: Translator) -> None:
         class UnknownAstNode(AstNode):
             pass
-
-        translator = TranslatorImpl()
 
         with pytest.raises(TranslationError) as exc_info:
             translator.translate(UnknownAstNode())
 
         assert "Unknown type of AST node" in str(exc_info.value)
 
-    def test_translate_ast_with_unknown_token(self) -> None:
+    def test_translate_ast_with_unknown_token(self, translator: Translator) -> None:
         ast = ListNode([LeafNode(Token(Lexeme("?"), t.cast(TokenType, None)))])
-        translator = TranslatorImpl()
 
         with pytest.raises(TranslationError) as exc_info:
             translator.translate(ast)
