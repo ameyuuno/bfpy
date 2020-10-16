@@ -3,6 +3,6 @@ import pytest
 from bfpy.core.parser.parser import Parser, ParserImpl
 
 
-@pytest.fixture  # type: ignore
+@pytest.fixture
 def parser() -> Parser:
     return ParserImpl()

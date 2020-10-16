@@ -3,6 +3,6 @@ import pytest
 from bfpy.core.lexer.lexer import Lexer, LexerImpl
 
 
-@pytest.fixture  # type: ignore
+@pytest.fixture
 def lexer() -> Lexer:
     return LexerImpl()

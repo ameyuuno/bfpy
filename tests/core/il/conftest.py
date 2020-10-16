@@ -3,6 +3,6 @@ import pytest
 from bfpy.core.il.translator import Translator, TranslatorImpl
 
 
-@pytest.fixture  # type: ignore
+@pytest.fixture
 def translator() -> Translator:
     return TranslatorImpl()
