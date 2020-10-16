@@ -4,10 +4,10 @@ import pytest
 
 from bfpy.core.lexer.token import Token, Lexeme, TokenType
 from bfpy.core.parser.ast import AstNode, ListNode, LeafNode
-from bfpy.core.parser.parser import ParserImpl, SyntacticError
+from bfpy.core.parser.parser import SyntacticError, Parser
 
 
-class TestParserImpl:
+class TestParser:
     LSHIFT = Token(Lexeme("<"), TokenType.LSHIFT)
     RSHIFT = Token(Lexeme(">"), TokenType.RSHIFT)
     INC = Token(Lexeme("+"), TokenType.INC)
@@ -86,9 +86,7 @@ class TestParserImpl:
             id="'+[-[<<[+[--->]-[<<<]]]>>>-]>-.'",
         ),
     ])
-    def test_parse(self, tokens: t.Sequence[Token], expected_ast: AstNode) -> None:
-        parser = ParserImpl()
-
+    def test_parse(self, parser: Parser, tokens: t.Sequence[Token], expected_ast: AstNode) -> None:
         actual_ast = parser.parse(tokens)
 
         assert actual_ast == expected_ast
@@ -105,9 +103,8 @@ class TestParserImpl:
             id="Close-loop bracket without open-loop bracket before",
         ),
     ])
-    def test_parsing_token_sequence_with_syntax_error(self, tokens: t.Sequence[Token], expected_error: t.Text) -> None:
-        parser = ParserImpl()
-
+    def test_parsing_token_sequence_with_syntax_error(self, parser: Parser, tokens: t.Sequence[Token],
+                                                      expected_error: t.Text) -> None:
         with pytest.raises(SyntacticError) as exc_info:
             parser.parse(tokens)
 
