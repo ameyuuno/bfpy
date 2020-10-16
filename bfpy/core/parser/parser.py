@@ -25,16 +25,16 @@ class ParserImpl(Parser):
         root_nodes: t.MutableSequence[AstNode] = []
 
         nodes: t.MutableSequence[AstNode] = root_nodes
-        bodies: t.MutableSequence[t.MutableSequence[AstNode]] = []
+        loop_bodies: t.MutableSequence[t.MutableSequence[AstNode]] = []
 
         for token in tokens:
             if token.type_ is TokenType.OLOOP:
-                bodies.append(nodes)
+                loop_bodies.append(nodes)
                 nodes = []
 
             elif token.type_ is TokenType.CLOOP:
                 try:
-                    prev_nodes = bodies.pop()
+                    prev_nodes = loop_bodies.pop()
                 except IndexError as exc:
                     raise SyntacticError(f"Unexpected token (token={token})") from exc
 
@@ -44,7 +44,7 @@ class ParserImpl(Parser):
             else:
                 nodes.append(LeafNode(token))
 
-        if len(bodies) > 0:
+        if len(loop_bodies) > 0:
             raise SyntacticError(f"Missing token `[` (token_type={TokenType.OLOOP})")
 
         return ListNode(root_nodes)
