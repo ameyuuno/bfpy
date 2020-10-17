@@ -2,7 +2,7 @@ import typing as t
 
 import pytest
 
-from bfpy.core.interpreter.tape import Tape, FiniteTape, OutOfBoundsError
+from bfpy.core.interpreter.tape import Tape
 
 
 class TestTape:
@@ -99,55 +99,3 @@ class TestTape:
         actual_result = tape.get()
 
         assert actual_result == expected_result
-
-
-class TestFiniteTape:
-    @pytest.mark.parametrize("tape_length", [1, 2, 5, 10])
-    @pytest.mark.parametrize("steps", [1, 2, 5, 10])
-    def test_out_of_left_bound(self, tape_length: int, steps: int) -> None:
-        tape = FiniteTape(tape_length)
-
-        with pytest.raises(OutOfBoundsError) as exc_info:
-            tape.shift_left(steps)
-
-        assert "Pointer is out of tape bounds" in str(exc_info.value)
-
-    @pytest.mark.parametrize("tape_length", [1, 2, 5, 10])
-    @pytest.mark.parametrize("extra_steps", [0, 1, 2, 5, 10])
-    def test_out_of_right_bound(self, tape_length: int, extra_steps: int) -> None:
-        tape = FiniteTape(tape_length)
-
-        with pytest.raises(OutOfBoundsError) as exc_info:
-            tape.shift_right(tape_length + extra_steps)
-
-        assert "Pointer is out of tape bounds" in str(exc_info.value)
-
-    def test_out_of_left_bound_error_do_not_change_tape_state(self) -> None:
-        tape = FiniteTape()
-
-        tape.set(1)
-
-        with pytest.raises(OutOfBoundsError):
-            tape.shift_left(10)
-
-        assert tape.get() == 1
-
-    def test_out_of_right_bound_error_do_not_change_tape_state(self) -> None:
-        tape = FiniteTape(length=5)
-
-        tape.set(1)
-
-        with pytest.raises(OutOfBoundsError):
-            tape.shift_right(10)
-
-        assert tape.get() == 1
-
-    def test_default_tape_length(self) -> None:
-        tape = FiniteTape()
-
-        tape.shift_right(29_999)
-
-        with pytest.raises(OutOfBoundsError) as exc_info:
-            tape.shift_right(1)
-
-        assert "Pointer is out of tape bounds" in str(exc_info.value)

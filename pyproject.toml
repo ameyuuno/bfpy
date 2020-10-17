@@ -15,10 +15,13 @@ pytest-cov = "^2.10.1"
 radon = "^4.3.2"
 
 [tool.pytest.ini_options]
-addopts = """--verbose --full-trace --color=yes --code-highlight=yes
+addopts = """--verbose --full-trace --strict-markers --color=yes --code-highlight=yes
              --cov=./bfpy/ --cov-report=html --cov-report=term"""
 console_output_style = "count"
 testpaths = ["tests"]
+markers = [
+    "finite_tape_length: set length of `finite_tape` fixture in number of cells as argument (`int`).",
+]
 
 [tool.coverage.run]
 branch = true
