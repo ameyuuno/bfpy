@@ -21,6 +21,7 @@ console_output_style = "count"
 testpaths = ["tests"]
 markers = [
     "finite_tape_length: set length of `finite_tape` fixture in number of cells as argument (`int`).",
+    "source_bytes: byte-string which represent content of byte stream.",
 ]
 
 [tool.coverage.run]
