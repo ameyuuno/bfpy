@@ -1,6 +1,7 @@
 __all__ = ["TapeError", "OutOfBoundsError", "Tape", "FiniteTape"]
 
 import abc
+import typing as t
 
 
 class TapeError(Exception):
@@ -27,12 +28,14 @@ class Tape(metaclass=abc.ABCMeta):
 
 
 class FiniteTape(Tape):
-    __DEFAULT_LENGTH = 30000
+    __DEFAULT_LENGTH = 30_000
 
-    def __init__(self, length: int = __DEFAULT_LENGTH) -> None:
-        self.__length = length
+    def __init__(self, length: t.Optional[int] = None) -> None:
+        self.__length = length if length is not None else self.__DEFAULT_LENGTH
+        if self.__length <= 0:
+            raise ValueError("Length of finite tape should be >= 0")
+
         self.__cells = bytearray(self.__length)
-
         self.__pointer = 0
 
     def get(self) -> int:
