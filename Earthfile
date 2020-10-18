@@ -22,7 +22,7 @@ checkTypes:
     COPY setup.cfg setup.cfg
     COPY bfpy/ bfpy/
     COPY tests/ tests/
-    RUN poetry run mypy > typeChecking.out && cat typeChecking.out && \
+    RUN poetry run mypy | tee typeChecking.out && \
         mkdir typeChecking/ && mv typeChecking.out typeChecking/
     SAVE ARTIFACT typeChecking/ AS LOCAL .local/reports/typeChecking/
 
