@@ -3,7 +3,7 @@ import typing as t
 import pytest
 
 from bfpy.core.lexer.token import Token, Lexeme, TokenType
-from bfpy.core.parser.ast import AstNode, ListNode, LeafNode, Ast
+from bfpy.core.parser.ast import ListNode, LeafNode, Ast
 from bfpy.core.parser.parser import SyntacticError, Parser
 
 
@@ -86,7 +86,7 @@ class TestParser:
             id="'+[-[<<[+[--->]-[<<<]]]>>>-]>-.'",
         ),
     ])
-    def test_parse(self, parser: Parser, tokens: t.Sequence[Token], expected_ast: AstNode) -> None:
+    def test_parse(self, parser: Parser, tokens: t.Sequence[Token], expected_ast: Ast) -> None:
         actual_ast = parser.parse(tokens)
 
         assert actual_ast == expected_ast
