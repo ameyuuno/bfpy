@@ -12,6 +12,9 @@ class Interpreter(metaclass=abc.ABCMeta):
 
 
 class InterpreterImpl(Interpreter):
+    def __init__(self, tape: Tape) -> None:
+        self.__tape = tape
+
     def evaluate(self, byte_input_stream: ByteInputStream, byte_output_stream: ByteOutputStream,
                  program: Program) -> None:
         raise NotImplementedError
