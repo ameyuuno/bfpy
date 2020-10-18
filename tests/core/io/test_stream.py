@@ -1,3 +1,4 @@
+import io
 import typing as t
 
 import pytest
@@ -25,24 +26,24 @@ class TestByteInputStream:
 
 class TestByteOutputStream:
     @pytest.mark.parametrize("writing_bytes", [
-        pytest.param([], id="Empty byte string"),
-        pytest.param([72, 101, 108, 108, 111, 44, 32, 87, 111, 114, 108, 100, 33], id="'Hello, World!'"),
+        pytest.param(b"", id="Empty byte string"),
+        pytest.param(b"Hello, World!", id="'Hello, World!'"),
     ])
-    def test_write(self, byte_output_stream: ByteOutputStream, collected_written_bytes: t.List[int],
-                   writing_bytes: t.List[int]) -> None:
+    def test_write(self, byte_output_stream: ByteOutputStream, collected_written_bytes: io.BytesIO,
+                   writing_bytes: t.ByteString) -> None:
         for byte in writing_bytes:
             byte_output_stream.write(byte)
 
-        assert collected_written_bytes == writing_bytes
+        assert collected_written_bytes.getvalue() == writing_bytes
 
     @pytest.mark.parametrize("non_byte", [
         pytest.param(-1, id="Negative integer"),
         pytest.param(256, id="Integer which is greater than 255")
     ])
     def test_can_not_write_non_byte_integer(self, byte_output_stream: ByteOutputStream,
-                                            collected_written_bytes: t.List[int], non_byte: int) -> None:
+                                            collected_written_bytes: io.BytesIO, non_byte: int) -> None:
         with pytest.raises(IoError) as exc_info:
             byte_output_stream.write(non_byte)
 
         assert str(exc_info.value) == "Byte should be in range [0, 255]"
-        assert collected_written_bytes == []
+        assert collected_written_bytes.getvalue() == b""
