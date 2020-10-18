@@ -1,4 +1,4 @@
-name: Main CI Pipeline
+name: Code Quality
 
 on:
   pull_request:
@@ -12,10 +12,11 @@ on:
       - "poetry.lock"
       - "setup.cfg"
       - "Earthfile"
-      - ".github/workflows/main.yml"
+      - ".github/workflows/quality.yml"
 
 jobs:
-  pipeline:
+  code-metrics:
+    name: Collect Code Metrics
     runs-on: ubuntu-latest
     env:
       GIT_URL_INSTEAD_OF: "https://github.com/=git@github.com:"
@@ -39,8 +40,5 @@ jobs:
       - name: Earth version
         run: earth --version
 
-      - name: Check type annotations
-        run: earth +checkTypes
-
-      - name: Run tests
-        run: earth +runTests
+      - name: Collect code metrics
+        run: earth +codeMetrics

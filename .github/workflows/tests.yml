@@ -1,4 +1,4 @@
-name: Code Quality
+name: Tests
 
 on:
   pull_request:
@@ -12,16 +12,18 @@ on:
       - "poetry.lock"
       - "setup.cfg"
       - "Earthfile"
-      - ".github/workflows/codeQuality.yml"
+      - ".github/workflows/tests.yml"
 
 jobs:
-  code-metrics:
+  tests:
+    name: Run Tests
     runs-on: ubuntu-latest
     env:
       GIT_URL_INSTEAD_OF: "https://github.com/=git@github.com:"
       FORCE_COLOR: 1
     steps:
       - uses: actions/checkout@v2
+
       - name: Put back the git branch into git (Earthly uses it for tagging)
         run: |
           branch=""
@@ -31,9 +33,12 @@ jobs:
             branch="${GITHUB_REF##*/}"
           fi
           git checkout -b "$branch" || true
+
       - name: Download latest earth
         run: "sudo /bin/sh -c 'wget https://github.com/earthly/earthly/releases/download/v0.3.10/earth-linux-amd64 -O /usr/local/bin/earth && chmod +x /usr/local/bin/earth'"
+
       - name: Earth version
         run: earth --version
-      - name: Collect code metrics
-        run: earth +codeMetrics
+
+      - name: Run tests
+        run: earth +runTests
