@@ -10,6 +10,33 @@ python = "^3.8"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.782"
+pytest = "^6.1.1"
+pytest-cov = "^2.10.1"
+radon = "^4.3.2"
+
+[tool.pytest.ini_options]
+addopts = """--verbose --full-trace --strict-markers --color=yes --code-highlight=yes
+             --cov=bfpy/ --cov-report=html --cov-report=term"""
+console_output_style = "count"
+testpaths = ["tests"]
+markers = [
+    "finite_tape_length: set length of `finite_tape` fixture in number of cells as argument (`int`).",
+    "source_bytes: byte-string which represent content of byte stream.",
+]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "@abc.abstractmethod",
+    "if __name__ == .__main__.:",
+]
+show_missing = true
+
+[tool.coverage.html]
+directory = ".local/reports/testCoverage/"
 
 [build-system]
 requires = ["poetry>=0.12"]
