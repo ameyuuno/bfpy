@@ -31,12 +31,16 @@ codeMetrics:
     COPY setup.cfg setup.cfg
     COPY bfpy/ bfpy/
     COPY tests/ tests/
-    RUN poetry run radon cc --output-file=codeComplexity.out bfpy/ tests/ && cat codeComplexity.out && \
-        poetry run radon mi --output-file=maintainabilityIndex.out bfpy/ tests/ && cat maintainabilityIndex.out && \
-        poetry run radon raw --output-file=rawMetrics.out bfpy/ tests/ && cat rawMetrics.out && \
-        poetry run radon hal --output-file=halsteadComplexity.out bfpy/ tests/ && cat halsteadComplexity.out && \
+    RUN poetry run radon cc --output-file=cyclomaticComplexity.out bfpy/ tests/ && \
+        echo "=== Cyclomatic Complexity ===" && cat cyclomaticComplexity.out && echo "\n" \
+        poetry run radon mi --output-file=maintainabilityIndex.out bfpy/ tests/ && \
+        echo "=== Maintainability Index ===" && cat maintainabilityIndex.out && echo "\n" \
+        poetry run radon raw --output-file=rawMetrics.out bfpy/ tests/ && \
+        echo "=== Raw Code Metrics ===" && cat rawMetrics.out && echo "\n" \
+        poetry run radon hal --output-file=halsteadComplexity.out bfpy/ tests/ && \
+        echo "=== Halstead Complexity ===" && cat halsteadComplexity.out && echo "\n" \
         mkdir codeMetrics/ && \
-        mv codeComplexity.out maintainabilityIndex.out rawMetrics.out halsteadComplexity.out codeMetrics/
+        mv cyclomaticComplexity.out maintainabilityIndex.out rawMetrics.out halsteadComplexity.out codeMetrics/
     SAVE ARTIFACT codeMetrics/ AS LOCAL .local/reports/codeMetrics/
 
 
