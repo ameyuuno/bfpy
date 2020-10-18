@@ -25,7 +25,7 @@ class BytesBidirectionalStreamOverTextIo(ByteInputStream, ByteOutputStream):
     def read(self) -> int:
         char = self.__source.read(1)
         if len(char) == 0:
-            char = b"\x00"  # NOTE: Return 0 when there is EOF. It is language extension devised by Panu Kalliokoski.
+            char = "\x00"  # NOTE: Return 0 when there is EOF. It is language extension devised by Panu Kalliokoski.
 
         byte = ord(char)
         self.__validate_byte(byte)
