@@ -2,11 +2,11 @@ import typing as t
 
 import pytest
 
-from bfpy.core.il.operation import (Operation, CompositeOperation, Addition, Subtraction, LeftShift, RightShift,
-                                    WriteByte, ReadByte)
+from bfpy.core.il.operation import (Operation, Program, Addition, Subtraction, LeftShift, RightShift,
+                                    WriteByte, ReadByte, Loop)
 from bfpy.core.il.translator import Translator, TranslationError
 from bfpy.core.lexer.token import Token, Lexeme, TokenType
-from bfpy.core.parser.ast import AstNode, ListNode, LeafNode
+from bfpy.core.parser.ast import AstNode, ListNode, LeafNode, Ast
 
 
 class TestTranslator:
@@ -21,34 +21,34 @@ class TestTranslator:
 
     @pytest.mark.parametrize("ast, expected_operation", [
         pytest.param(
-            ListNode([]),
-            CompositeOperation([]),
+            Ast([]),
+            Program([]),
             id="''",
         ),
         pytest.param(
-            ListNode([LeafNode(INC)]),
-            CompositeOperation([Addition(1)]),
+            Ast([LeafNode(INC)]),
+            Program([Addition(1)]),
             id="'+'",
         ),
         pytest.param(
-            ListNode([LeafNode(INC), LeafNode(DEC)]),
-            CompositeOperation([Addition(1), Subtraction(1)]),
+            Ast([LeafNode(INC), LeafNode(DEC)]),
+            Program([Addition(1), Subtraction(1)]),
             id="'+-'",
         ),
         pytest.param(
-            ListNode([ListNode([LeafNode(RB), LeafNode(WB)])]),
-            CompositeOperation([CompositeOperation([ReadByte(), WriteByte()])]),
+            Ast([ListNode([LeafNode(RB), LeafNode(WB)])]),
+            Program([Loop([ReadByte(), WriteByte()])]),
             id="'[,.]'",
         ),
         pytest.param(
-            ListNode([
+            Ast([
                 ListNode([
                     LeafNode(LSHIFT),
                     LeafNode(RSHIFT),
                 ])
             ]),
-            CompositeOperation([
-                CompositeOperation([
+            Program([
+                Loop([
                     LeftShift(1),
                     RightShift(1),
                 ])
@@ -56,7 +56,7 @@ class TestTranslator:
             id="'[<>]'",
         ),
         pytest.param(
-            ListNode([
+            Ast([
                 LeafNode(INC),
                 ListNode([
                     LeafNode(DEC),
@@ -87,22 +87,22 @@ class TestTranslator:
                 LeafNode(DEC),
                 LeafNode(WB),
             ]),
-            CompositeOperation([
+            Program([
                 Addition(1),
-                CompositeOperation([
+                Loop([
                     Subtraction(1),
-                    CompositeOperation([
+                    Loop([
                         LeftShift(1),
                         LeftShift(1),
-                        CompositeOperation([
+                        Loop([
                             Addition(1),
-                            CompositeOperation([
+                            Loop([
                                 Subtraction(1),
                                 Subtraction(1),
                                 RightShift(1),
                             ]),
                             Subtraction(1),
-                            CompositeOperation([
+                            Loop([
                                 LeftShift(1),
                                 LeftShift(1),
                                 LeftShift(1),
@@ -121,7 +121,7 @@ class TestTranslator:
             id="'+[-[<<[+[-->]-[<<<]]]>>>-]>-.'",
         ),
     ])
-    def test_translate(self, translator: Translator, ast: AstNode, expected_operation: Operation) -> None:
+    def test_translate(self, translator: Translator, ast: Ast, expected_operation: Operation) -> None:
         actual_operation = translator.translate(ast)
 
         assert actual_operation == expected_operation
@@ -131,12 +131,12 @@ class TestTranslator:
             pass
 
         with pytest.raises(TranslationError) as exc_info:
-            translator.translate(UnknownAstNode())
+            translator.translate(Ast([UnknownAstNode()]))
 
         assert "Unknown type of AST node" in str(exc_info.value)
 
     def test_translate_ast_with_unknown_token(self, translator: Translator) -> None:
-        ast = ListNode([LeafNode(Token(Lexeme("?"), t.cast(TokenType, None)))])
+        ast = Ast([LeafNode(Token(Lexeme("?"), t.cast(TokenType, None)))])
 
         with pytest.raises(TranslationError) as exc_info:
             translator.translate(ast)

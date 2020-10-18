@@ -1,5 +1,5 @@
-__all__ = ["Operation", "Addition", "Subtraction", "LeftShift", "RightShift", "ReadByte", "WriteByte",
-           "CompositeOperation"]
+__all__ = ["Operation", "Addition", "Subtraction", "LeftShift", "RightShift", "ReadByte", "WriteByte", "Loop",
+           "Program"]
 
 import dataclasses as dc
 import typing as t
@@ -43,5 +43,10 @@ class WriteByte(Operation):
 
 
 @dc.dataclass(frozen=True)
-class CompositeOperation(Operation):
+class Loop(Operation):
+    body: t.Sequence[Operation]
+
+
+@dc.dataclass(frozen=True)
+class Program(Operation):
     instructions: t.Sequence[Operation]

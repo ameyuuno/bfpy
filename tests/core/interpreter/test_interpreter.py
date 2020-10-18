@@ -3,8 +3,8 @@ import typing as t
 
 import pytest
 
-from bfpy.core.il.operation import (Operation, CompositeOperation, Addition, RightShift, LeftShift, Subtraction,
-                                    WriteByte)
+from bfpy.core.il.operation import (Operation, Program, Addition, RightShift, LeftShift, Subtraction,
+                                    WriteByte, Loop)
 from bfpy.core.interpreter.interpreter import Interpreter
 from bfpy.core.io.stream import ByteInputStream, ByteOutputStream
 
@@ -13,7 +13,7 @@ class TestInterpreter:
     @pytest.mark.parametrize("input_bytes, output_bytes", [(io.BytesIO(), io.BytesIO())], indirect=True)
     @pytest.mark.parametrize("operation, expected_output", [
         pytest.param(
-            CompositeOperation([
+            Program([
                 Addition(1),
                 Addition(1),
                 Addition(1),
@@ -24,7 +24,7 @@ class TestInterpreter:
                 Addition(1),
                 Addition(1),
                 Addition(1),
-                CompositeOperation([
+                Loop([
                     RightShift(1),
                     Addition(1),
                     Addition(1),
