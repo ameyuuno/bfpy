@@ -41,10 +41,6 @@ def byte_output_stream(request: SubRequest, collected_written_bytes: io.BytesIO)
     if stream_type == BytesBidirectionalStreamOverTextIo:
         text_io = io.TextIOWrapper(collected_written_bytes)
 
-        # ? NOTE: MyPy raises an error with message that `io.StringIO` is incompatible with `io.TextIOBase`.
-        # ?     It is strange because Python's documentation tells that "It (io.StringIO) inherits TextIOBase."
-        # ?     https://docs.python.org/3/library/io.html#io.StringIO
-        # ?     It seems like a false-positive error of MyPy, so just suppressed it.
         return BytesBidirectionalStreamOverTextIo(text_io)  # type: ignore
 
     raise ValueError("Can not build an instance of unknown implementation of byte output stream.")
