@@ -43,4 +43,4 @@ buildPackage:
     FROM +installDependencies
     COPY bfpy/ bfpy/
     RUN poetry build
-    SAVE ARTIFACT dist/ AS LOCAL dist/
+    SAVE ARTIFACT dist/ AS LOCAL .local/build/
