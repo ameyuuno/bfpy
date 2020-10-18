@@ -100,7 +100,13 @@ class TestTape:
 
         assert actual_result == expected_result
 
+    def test_set_all_valid_values(self, tape: Tape) -> None:
+        for byte in range(0, 256):
+            tape.set(byte)
+
+            assert tape.get() == byte
+
     @pytest.mark.parametrize("invalid_value", [-10000, -1, 256, 1024])
-    def test_can_not_write_invalid_value(self, tape: Tape, invalid_value: int) -> None:
+    def test_can_not_set_invalid_value(self, tape: Tape, invalid_value: int) -> None:
         with pytest.raises(ValueError):
             tape.set(invalid_value)
