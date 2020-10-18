@@ -1,7 +1,7 @@
 __all__ = ["IoError", "ByteInputStream", "ByteOutputStream", "BytesBidirectionalStreamOverTextIo"]
 
 import abc
-import io
+import typing as t
 
 
 class IoError(Exception):
@@ -19,7 +19,7 @@ class ByteOutputStream(metaclass=abc.ABCMeta):
 
 
 class BytesBidirectionalStreamOverTextIo(ByteInputStream, ByteOutputStream):
-    def __init__(self, source: io.TextIOBase) -> None:
+    def __init__(self, source: t.TextIO) -> None:
         self.__source = source
 
     def read(self) -> int:

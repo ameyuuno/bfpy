@@ -16,7 +16,7 @@ def input_bytes(request: SubRequest) -> io.BytesIO:
 
 @pytest.fixture
 def input_stream(input_bytes: io.BytesIO) -> ByteInputStream:
-    return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(input_bytes))  # type: ignore
+    return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(input_bytes))
 
 
 @pytest.fixture
@@ -26,7 +26,7 @@ def output_bytes(request: SubRequest) -> io.BytesIO:
 
 @pytest.fixture
 def output_stream(output_bytes: io.BytesIO) -> ByteInputStream:
-    return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(output_bytes))  # type: ignore
+    return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(output_bytes))
 
 
 @pytest.fixture(params=[lambda: InterpreterImpl(FiniteTape())])

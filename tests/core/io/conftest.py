@@ -18,7 +18,7 @@ def byte_input_stream(request: SubRequest, input_bytes: io.BytesIO) -> ByteInput
     stream_type: t.Type[ByteInputStream] = request.param
 
     if stream_type == BytesBidirectionalStreamOverTextIo:
-        return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(input_bytes))  # type: ignore
+        return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(input_bytes))
 
     raise ValueError("Can not build an instance of unknown implementation of byte input stream.")
 
@@ -33,6 +33,6 @@ def byte_output_stream(request: SubRequest, output_bytes: io.BytesIO) -> ByteOut
     stream_type: t.Type[ByteOutputStream] = request.param
 
     if stream_type == BytesBidirectionalStreamOverTextIo:
-        return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(output_bytes))  # type: ignore
+        return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(output_bytes))
 
     raise ValueError("Can not build an instance of unknown implementation of byte output stream.")
