@@ -29,6 +29,8 @@ def output_stream(output_bytes: io.BytesIO) -> ByteInputStream:
     return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(output_bytes))  # type: ignore
 
 
-@pytest.fixture(params=[InterpreterImpl(FiniteTape())])
+@pytest.fixture(params=[lambda: InterpreterImpl(FiniteTape())])
 def interpreter(request: SubRequest) -> Interpreter:
-    return t.cast(Interpreter, request.param)
+    interpreter_builder: t.Callable[[], Interpreter] = request.param
+
+    return interpreter_builder()
