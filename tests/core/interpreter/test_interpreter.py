@@ -3,10 +3,9 @@ import typing as t
 
 import pytest
 
-from bfpy.core.il.operation import Operation, CompositeOperation, Addition, RightShift, LeftShift, Subtraction, \
-    WriteByte
+from bfpy.core.il.operation import (Operation, CompositeOperation, Addition, RightShift, LeftShift, Subtraction,
+                                    WriteByte)
 from bfpy.core.interpreter.interpreter import Interpreter
-from bfpy.core.interpreter.tape import Tape
 from bfpy.core.io.stream import ByteInputStream, ByteOutputStream
 
 
@@ -132,9 +131,10 @@ class TestInterpreter:
                "--.>+.>."
         ),
     ])
-    def test_evaluate(self, tape: Tape, input_stream: ByteInputStream, output_stream: ByteOutputStream,
-                      interpreter: Interpreter, input_bytes: io.BytesIO, output_bytes: io.BytesIO,
-                      operation: Operation, expected_output: t.ByteString) -> None:
-        interpreter.evaluate(tape, input_stream, output_stream, operation)
+    def test_evaluate_without_read_byte_operations(self, interpreter: Interpreter,
+                                                   input_stream: ByteInputStream, output_stream: ByteOutputStream,
+                                                   input_bytes: io.BytesIO, output_bytes: io.BytesIO,
+                                                   operation: Operation, expected_output: t.ByteString) -> None:
+        interpreter.evaluate(input_stream, output_stream, operation)
 
         assert output_bytes.getvalue() == expected_output
