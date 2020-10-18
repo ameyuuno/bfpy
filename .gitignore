@@ -1,13 +1,12 @@
-### Python
+### Python ###
 __pycache__/
 *.py[cod]
 
-htmlcov/
 .coverage
 .coverage.*
 .cache
 .pytest_cache/
-cover/
+reports/test-coverage/
 
 # Environments
 .env
@@ -16,9 +15,12 @@ cover/
 # mypy
 .mypy_cache/
 
-### macOS
+### macOS ###
 # General
 .DS_Store
 
-### JetBrains
+### JetBrains ###
 .idea/
+
+### Project Files ###
+.local/
