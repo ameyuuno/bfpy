@@ -17,6 +17,15 @@ installDevDependencies:
     SAVE IMAGE
 
 
+checkTypes:
+    FROM +installDevDependencies
+    COPY setup.cfg setup.cfg
+    COPY bfpy/ bfpy/
+    COPY tests/ tests/
+    RUN poetry run mypy > typeChecking.out && cat typeChecking.out && \
+        mkdir typeChecking/ && mv typeChecking.out typeChecking/
+    SAVE ARTIFACT typeChecking/ AS LOCAL .local/reports/typeChecking/
+
 codeMetrics:
     FROM +installDevDependencies
     COPY setup.cfg setup.cfg
