@@ -11,7 +11,7 @@ from bfpy.core.io.stream import ByteInputStream, ByteOutputStream
 
 class TestInterpreter:
     @pytest.mark.parametrize("input_bytes, output_bytes", [(io.BytesIO(), io.BytesIO())], indirect=True)
-    @pytest.mark.parametrize("operation, expected_output", [
+    @pytest.mark.parametrize("program, expected_output", [
         pytest.param(
             Program([
                 Addition(1),
@@ -134,7 +134,7 @@ class TestInterpreter:
     def test_evaluate_without_read_byte_operations(self, interpreter: Interpreter,
                                                    input_stream: ByteInputStream, output_stream: ByteOutputStream,
                                                    input_bytes: io.BytesIO, output_bytes: io.BytesIO,
-                                                   operation: Operation, expected_output: t.ByteString) -> None:
-        interpreter.evaluate(input_stream, output_stream, operation)
+                                                   program: Program, expected_output: t.ByteString) -> None:
+        interpreter.evaluate(input_stream, output_stream, program)
 
         assert output_bytes.getvalue() == expected_output
