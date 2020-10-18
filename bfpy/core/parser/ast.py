@@ -1,4 +1,4 @@
-__all__ = ["AstNode", "ListNode", "LeafNode"]
+__all__ = ["Ast", "AstNode", "ListNode", "LeafNode"]
 
 import dataclasses as dc
 import typing as t
@@ -21,3 +21,8 @@ class ListNode(AstNode):
 @dc.dataclass(frozen=True)
 class LeafNode(AstNode):
     token: Token
+
+
+@dc.dataclass(frozen=True)
+class Ast:
+    nodes: t.Sequence[AstNode]

@@ -3,7 +3,7 @@ import typing as t
 import pytest
 
 from bfpy.core.lexer.token import Token, Lexeme, TokenType
-from bfpy.core.parser.ast import AstNode, ListNode, LeafNode
+from bfpy.core.parser.ast import AstNode, ListNode, LeafNode, Ast
 from bfpy.core.parser.parser import SyntacticError, Parser
 
 
@@ -20,27 +20,27 @@ class TestParser:
     @pytest.mark.parametrize("tokens, expected_ast", [
         pytest.param(
             [],
-            ListNode([]),
+            Ast([]),
             id="''",
         ),
         pytest.param(
             [INC],
-            ListNode([LeafNode(INC)]),
+            Ast([LeafNode(INC)]),
             id="'+'",
         ),
         pytest.param(
             [INC, DEC],
-            ListNode([LeafNode(INC), LeafNode(DEC)]),
+            Ast([LeafNode(INC), LeafNode(DEC)]),
             id="'+-'",
         ),
         pytest.param(
             [OLOOP, CLOOP],
-            ListNode([ListNode([])]),
+            Ast([ListNode([])]),
             id="'[]'",
         ),
         pytest.param(
             [OLOOP, LSHIFT, RSHIFT, CLOOP],
-            ListNode([
+            Ast([
                 ListNode([
                     LeafNode(LSHIFT),
                     LeafNode(RSHIFT),
@@ -51,7 +51,7 @@ class TestParser:
         pytest.param(
             [INC, OLOOP, DEC, OLOOP, LSHIFT, LSHIFT, OLOOP, INC, OLOOP, DEC, DEC, DEC, RSHIFT, CLOOP, DEC, OLOOP,
              LSHIFT, LSHIFT, LSHIFT, CLOOP, CLOOP, CLOOP, RSHIFT, RSHIFT, RSHIFT, DEC, CLOOP, RSHIFT, DEC, WB],
-            ListNode([
+            Ast([
                 LeafNode(INC),
                 ListNode([
                     LeafNode(DEC),

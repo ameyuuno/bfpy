@@ -4,7 +4,7 @@ import abc
 import typing as t
 
 from bfpy.core.lexer.token import Token, TokenType
-from bfpy.core.parser.ast import AstNode, ListNode, LeafNode
+from bfpy.core.parser.ast import AstNode, ListNode, LeafNode, Ast
 
 
 class SyntacticError(Exception):
@@ -17,11 +17,11 @@ class SyntacticError(Exception):
 
 class Parser(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def parse(self, tokens: t.Sequence[Token]) -> AstNode: ...
+    def parse(self, tokens: t.Sequence[Token]) -> Ast: ...
 
 
 class ParserImpl(Parser):
-    def parse(self, tokens: t.Sequence[Token]) -> AstNode:
+    def parse(self, tokens: t.Sequence[Token]) -> Ast:
         root_nodes: t.MutableSequence[AstNode] = []
 
         nodes: t.MutableSequence[AstNode] = root_nodes
@@ -47,4 +47,4 @@ class ParserImpl(Parser):
         if len(loop_bodies) > 0:
             raise SyntacticError(f"Missing token `[` (token_type={TokenType.OLOOP})")
 
-        return ListNode(root_nodes)
+        return Ast(root_nodes)
