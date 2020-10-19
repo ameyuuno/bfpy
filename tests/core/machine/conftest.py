@@ -15,11 +15,17 @@ from bfpy.core.parser.parser import ParserImpl
 
 @pytest.fixture
 def input_bytes(request: SubRequest) -> io.BytesIO:
+    if not hasattr(request, "param"):
+        return io.BytesIO()
+
     return t.cast(io.BytesIO, request.param)
 
 
 @pytest.fixture
 def output_bytes(request: SubRequest) -> io.BytesIO:
+    if not hasattr(request, "param"):
+        return io.BytesIO()
+
     return t.cast(io.BytesIO, request.param)
 
 

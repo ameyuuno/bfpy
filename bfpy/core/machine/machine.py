@@ -1,14 +1,17 @@
-__all__ = ["Machine", "MachineImpl"]
+__all__ = ["MachineError", "Machine", "MachineImpl"]
 
 import abc
 import typing as t
 
-from bfpy.core.il.operation import Program
 from bfpy.core.il.translator import Translator
 from bfpy.core.interpreter.interpreter import Interpreter
 from bfpy.core.io.stream import ByteInputStream, ByteOutputStream
-from bfpy.core.lexer.lexer import Lexer
-from bfpy.core.parser.parser import Parser
+from bfpy.core.lexer.lexer import Lexer, LexicalError
+from bfpy.core.parser.parser import Parser, SyntacticError
+
+
+class MachineError(Exception):
+    pass
 
 
 class Machine(metaclass=abc.ABCMeta):
