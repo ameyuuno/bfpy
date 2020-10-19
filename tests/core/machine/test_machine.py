@@ -17,13 +17,13 @@ class TestMachine:
         pytest.param(
             "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++"
             "..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.",
-            b"Hello World!",
+            b"Hello World!\n",
             io.BytesIO(),
             io.BytesIO(),
         ),
         pytest.param(
             ",[.,]",
-            b"Hello World!",
+            b"It is cat program.",
             io.BytesIO(b"It is cat program."),
             io.BytesIO(),
         ),
