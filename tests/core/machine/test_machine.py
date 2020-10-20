@@ -3,6 +3,7 @@ import typing as t
 
 import pytest
 
+from bfpy.core.io.stream import ByteInputStream, ByteOutputStream
 from bfpy.core.machine.machine import Machine, MachineError
 
 
@@ -29,8 +30,9 @@ class TestMachine:
         ),
     ], indirect=["input_bytes", "output_bytes"])
     def test_execute(self, machine: Machine, code: t.Text, expected_output: t.ByteString,
+                     byte_input_stream: ByteInputStream, byte_output_stream: ByteOutputStream,
                      input_bytes: io.BytesIO, output_bytes: io.BytesIO) -> None:
-        machine.execute(code)
+        machine.execute(byte_input_stream, byte_output_stream, code)
 
         assert output_bytes.getvalue() == expected_output
 
@@ -60,8 +62,9 @@ class TestMachine:
             MachineError("Evaluation error"),
         ),
     ])
-    def test_execute_invalid_code(self, machine: Machine, code: t.Text, expected_error: Exception) -> None:
+    def test_execute_invalid_code(self, machine: Machine, code: t.Text, expected_error: Exception,
+                                  byte_input_stream: ByteInputStream, byte_output_stream: ByteOutputStream) -> None:
         with pytest.raises(type(expected_error)) as exc_info:
-            machine.execute(code)
+            machine.execute(byte_input_stream, byte_output_stream, code)
 
         assert str(expected_error) in str(exc_info)
