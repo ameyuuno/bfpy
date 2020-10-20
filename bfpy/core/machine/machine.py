@@ -17,7 +17,7 @@ class MachineError(Exception):
 
 class Machine(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def execute(self, code: t.Text) -> None: ...
+    def execute(self, input_stream: ByteInputStream, output_stream: ByteOutputStream, code: t.Text) -> None: ...
 
 
 class MachineImpl(Machine):
