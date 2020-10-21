@@ -6,41 +6,114 @@ import pytest
 from bfpy.repl.repl import Repl
 
 
-@pytest.mark.xfail
 class TestRepl:
-    @pytest.mark.parametrize("expected_repl_output, expected_output_bytes, reader, writer, input_bytes, output_bytes", [
+    @pytest.mark.parametrize("expected_repl_output, reader_byte_stream, writer_byte_stream", [
         pytest.param(
             "bfpy> ",
-            b"",
-            io.StringIO("\\q\n"),
-            io.StringIO(),
-            io.BytesIO(b""),
+            io.BytesIO(b"\\q\n"),
             io.BytesIO(),
-            id="",
+            id="(Quit ASAP)",
         ),
         pytest.param(
-            "bfpy> \nbfpy> ",
-            b"",
-            io.StringIO("+\n\\q\n"),
-            io.StringIO(),
-            io.BytesIO(b""),
+            ("bfpy> "
+             "\n-----\n"
+             "bfpy> "),
+            io.BytesIO(b"+\n\\q\n"),
             io.BytesIO(),
             id="+",
         ),
         pytest.param(
-            "bfpy> \nbfpy> ",
-            b"\n",
-            io.StringIO("++++++++++.\n\\q\n"),
-            io.StringIO(),
-            io.BytesIO(b""),
+            ("bfpy> "
+             "\n"
+             "\n-----\n"
+             "bfpy> "),
+            io.BytesIO(b"++++++++++.\n\\q\n"),
             io.BytesIO(),
             id="++++++++++.",
         ),
-    ], indirect=["input_bytes", "output_bytes"])
-    def test_run(self, expected_repl_output: t.Text, expected_output_bytes: t.ByteString,
-                 repl: Repl, reader: io.StringIO, writer: io.StringIO,
-                 input_bytes: io.BytesIO, output_bytes: io.BytesIO) -> None:
+        pytest.param(
+            ("bfpy> "
+             "Hello World!\n"
+             "\n-----\n"
+             "bfpy> "),
+            io.BytesIO("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++"
+                       "..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>."
+                       "\n\\q\n".encode()),
+            io.BytesIO(),
+            id="(Hello World!)",
+        ),
+        pytest.param(
+            ("bfpy> "
+             "bfpy| "
+             "bfpy| "
+             "Hello World!\n"
+             "\n-----\n"
+             "bfpy> "),
+            io.BytesIO("++++++++++[>+++++++>++++++++++>\\\n"
+                       "+++>+<<<<-]>++.>+.+++++++ \\\n"
+                       "..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.\n"
+                       "\\q\n".encode()),
+            io.BytesIO(),
+            id="(Hello World!) with line breakers",
+        ),
+        pytest.param(
+            ("bfpy> "
+             "a b c d e"
+             "\n-----\n"
+             "bfpy> "),
+            io.BytesIO("+++++++++>,<[>.,<-]\n"
+                       "a b c d e\n"
+                       "\\q\n".encode()),
+            io.BytesIO(),
+            id="+++++++++>,<[>.,<-]",
+        ),
+    ], indirect=["reader_byte_stream", "writer_byte_stream"])
+    def test_run(self, expected_repl_output: t.Text, repl: Repl, reader: t.TextIO, writer: t.TextIO,
+                 reader_byte_stream: io.BytesIO, writer_byte_stream: io.BytesIO) -> None:
         repl.run(reader, writer)
 
-        assert writer.getvalue() == expected_repl_output
-        assert output_bytes.getvalue() == expected_output_bytes
+        assert writer_byte_stream.getvalue().decode() == expected_repl_output
+
+    @pytest.mark.parametrize("expected_error_in_repl, reader_byte_stream, writer_byte_stream", [
+        pytest.param(
+            "Lexical error",
+            io.BytesIO(b"++-.)\n\\q\n"),
+            io.BytesIO(),
+            id="++-.) - Lexical error",
+        ),
+        pytest.param(
+            "Lexical error",
+            io.BytesIO(b"++-.)\n\\q\n"),
+            io.BytesIO(),
+            id="++-.) - Lexical error",
+        ),
+        pytest.param(
+            "Lexical error",
+            io.BytesIO(b"--+=++[-]\n\\q\n"),
+            io.BytesIO(),
+            id="--+=++[-] - Lexical error",
+        ),
+        pytest.param(
+            "Syntax error",
+            io.BytesIO(b"--+]++[-]\n\\q\n"),
+            io.BytesIO(),
+            id="--+]++[-] - Syntax error",
+        ),
+        pytest.param(
+            "Syntax error",
+            io.BytesIO(b".+>++[-\n\\q\n"),
+            io.BytesIO(),
+            id=".+>++[- - Syntax error",
+        ),
+        pytest.param(
+            "Evaluation error",
+            io.BytesIO(b"<.+>++[-]\n\\q\n"),
+            io.BytesIO(),
+            id="<.+>++[-] - Evaluation error",
+        ),
+    ], indirect=["reader_byte_stream", "writer_byte_stream"])
+    def test_run_with_invalid_code(self, expected_error_in_repl: t.Text, repl: Repl, reader: t.TextIO, writer: t.TextIO,
+                                   reader_byte_stream: io.BytesIO, writer_byte_stream: io.BytesIO) -> None:
+        repl.run(reader, writer)
+
+        assert expected_error_in_repl in writer_byte_stream.getvalue().decode()
