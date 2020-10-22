@@ -1,4 +1,4 @@
-__all__ = ["IoError", "ByteInputStream", "ByteOutputStream", "BytesBidirectionalStreamOverBinaryIo"]
+__all__ = ["IoError", "ByteInputStream", "ByteOutputStream", "BytesBidirectionalStreamOverTextIo"]
 
 import abc
 import typing as t
@@ -18,16 +18,16 @@ class ByteOutputStream(metaclass=abc.ABCMeta):
     def write(self, byte: int) -> None: ...
 
 
-class BytesBidirectionalStreamOverBinaryIo(ByteInputStream, ByteOutputStream):
-    def __init__(self, source: t.BinaryIO) -> None:
+class BytesBidirectionalStreamOverTextIo(ByteInputStream, ByteOutputStream):
+    def __init__(self, source: t.TextIO) -> None:
         self.__source = source
 
     def read(self) -> int:
         char = self.__source.read(1)
         if len(char) == 0:
-            char = b"\x00"
+            char = '\x00'
 
-        byte = ord(char.decode())
+        byte = ord(char)
         self.__validate_byte(byte)
 
         return byte
@@ -36,7 +36,7 @@ class BytesBidirectionalStreamOverBinaryIo(ByteInputStream, ByteOutputStream):
         self.__validate_byte(byte)
         char = chr(byte)
 
-        self.__source.write(char.encode())
+        self.__source.write(char)
         self.__source.flush()
 
     @staticmethod

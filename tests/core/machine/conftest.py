@@ -7,7 +7,7 @@ from _pytest.fixtures import SubRequest
 from bfpy.core.il.translator import TranslatorImpl
 from bfpy.core.interpreter.interpreter import InterpreterImpl
 from bfpy.core.interpreter.tape import FiniteTape
-from bfpy.core.io.stream import BytesBidirectionalStreamOverBinaryIo
+from bfpy.core.io.stream import ByteInputStream, ByteOutputStream, BytesBidirectionalStreamOverTextIo
 from bfpy.core.lexer.lexer import LexerImpl
 from bfpy.core.machine.machine import Machine, MachineImpl
 from bfpy.core.parser.parser import ParserImpl
@@ -22,6 +22,11 @@ def input_bytes(request: SubRequest) -> io.BytesIO:
 
 
 @pytest.fixture
+def byte_input_stream(input_bytes: io.BytesIO) -> ByteInputStream:
+    return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(input_bytes))
+
+
+@pytest.fixture
 def output_bytes(request: SubRequest) -> io.BytesIO:
     if not hasattr(request, "param"):
         return io.BytesIO()
@@ -30,13 +35,15 @@ def output_bytes(request: SubRequest) -> io.BytesIO:
 
 
 @pytest.fixture
-def machine(input_bytes: io.BytesIO, output_bytes: io.BytesIO) -> Machine:
+def byte_output_stream(output_bytes: io.BytesIO) -> ByteOutputStream:
+    return BytesBidirectionalStreamOverTextIo(io.TextIOWrapper(output_bytes))
+
+
+@pytest.fixture
+def machine() -> Machine:
     lexer = LexerImpl()
     parser = ParserImpl()
     translator = TranslatorImpl()
     interpreter = InterpreterImpl(FiniteTape())
 
-    input_stream = BytesBidirectionalStreamOverBinaryIo(input_bytes)
-    output_stream = BytesBidirectionalStreamOverBinaryIo(output_bytes)
-
-    return MachineImpl(lexer, parser, translator, interpreter, input_stream, output_stream)
+    return MachineImpl(lexer, parser, translator, interpreter)

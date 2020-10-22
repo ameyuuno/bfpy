@@ -17,23 +17,19 @@ class MachineError(Exception):
 
 class Machine(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def execute(self, code: t.Text) -> None: ...
+    def execute(self, input_stream: ByteInputStream, output_stream: ByteOutputStream, code: t.Text) -> None: ...
 
 
 class MachineImpl(Machine):
-    def __init__(self, lexer: Lexer, parser: Parser, translator: Translator, interpreter: Interpreter,
-                 byte_input_stream: ByteInputStream, byte_output_stream: ByteOutputStream) -> None:
+    def __init__(self, lexer: Lexer, parser: Parser, translator: Translator, interpreter: Interpreter) -> None:
         self.__lexer = lexer
         self.__parser = parser
         self.__translator = translator
         self.__interpreter = interpreter
 
-        self.__byte_input_stream = byte_input_stream
-        self.__byte_output_stream = byte_output_stream
-
-    def execute(self, code: t.Text) -> None:
+    def execute(self, input_stream: ByteInputStream, output_stream: ByteOutputStream, code: t.Text) -> None:
         try:
-            self.__execute(code)
+            self.__execute(input_stream, output_stream, code)
 
         except LexicalError as error:
             raise MachineError(f"Lexical error: {error}") from error
@@ -44,9 +40,9 @@ class MachineImpl(Machine):
         except TapeError as error:
             raise MachineError(f"Evaluation error: {error}") from error
 
-    def __execute(self, code: t.Text) -> None:
+    def __execute(self, input_stream: ByteInputStream, output_stream: ByteOutputStream, code: t.Text) -> None:
         tokens = self.__lexer.tokenize(code)
         ast = self.__parser.parse(tokens)
         program = self.__translator.translate(ast)
 
-        self.__interpreter.evaluate(self.__byte_input_stream, self.__byte_output_stream, program)
+        self.__interpreter.evaluate(input_stream, output_stream, program)
