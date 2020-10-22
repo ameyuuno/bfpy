@@ -42,6 +42,8 @@ class ReplImpl(Repl):
         prompt = self.__PROMPT_INPUT_START
         while should_read_line:
             writer.write(prompt)
+            writer.flush()
+
             prompt = self.__PROMPT_INPUT_CONTINUATION
 
             line = reader.readline().strip()
@@ -65,6 +67,7 @@ class ReplImpl(Repl):
     def __print(self, writer: t.TextIO, result: t.Text) -> None:
         writer.write(result)
         writer.write(self.__PROMPT_OUTPUT_END)
+        writer.flush()
 
     def __is_quit(self, text: t.Text) -> bool:
         return text == self.__COMMAND_QUIT
