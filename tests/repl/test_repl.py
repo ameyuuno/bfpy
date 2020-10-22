@@ -16,7 +16,7 @@ class TestRepl:
         ),
         pytest.param(
             ("bfpy> "
-             "\n-----\n"
+             "\n"
              "bfpy> "),
             io.BytesIO(b"+\n\\q\n"),
             io.BytesIO(),
@@ -25,7 +25,7 @@ class TestRepl:
         pytest.param(
             ("bfpy> "
              "\n"
-             "\n-----\n"
+             "\n"
              "bfpy> "),
             io.BytesIO(b"++++++++++.\n\\q\n"),
             io.BytesIO(),
@@ -34,7 +34,7 @@ class TestRepl:
         pytest.param(
             ("bfpy> "
              "Hello World!\n"
-             "\n-----\n"
+             "\n"
              "bfpy> "),
             io.BytesIO("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++"
                        "..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>."
@@ -47,7 +47,7 @@ class TestRepl:
              "bfpy| "
              "bfpy| "
              "Hello World!\n"
-             "\n-----\n"
+             "\n"
              "bfpy> "),
             io.BytesIO("++++++++++[>+++++++>++++++++++>\\\n"
                        "+++>+<<<<-]>++.>+.+++++++ \\\n"
@@ -59,7 +59,7 @@ class TestRepl:
         pytest.param(
             ("bfpy> "
              "a b c d e"
-             "\n-----\n"
+             "\n"
              "bfpy> "),
             io.BytesIO("+++++++++>,<[>.,<-]\n"
                        "a b c d e\n"

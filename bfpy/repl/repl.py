@@ -15,7 +15,7 @@ class Repl(metaclass=abc.ABCMeta):
 class ReplImpl(Repl):
     __PROMPT_INPUT_START = "bfpy> "
     __PROMPT_INPUT_CONTINUATION = "bfpy| "
-    __PROMPT_OUTPUT_END = "\n-----\n"
+    __PROMPT_OUTPUT_END = "\n"
 
     __COMMAND_QUIT = "\\q"
 
