@@ -41,5 +41,5 @@ class BytesBidirectionalStreamOverTextIo(ByteInputStream, ByteOutputStream):
 
     @staticmethod
     def __validate_byte(byte: int) -> None:
-        if not (0 <= byte < 256):
+        if not (0 <= byte <= 255):
             raise IoError("Byte should be in range [0, 255]")
