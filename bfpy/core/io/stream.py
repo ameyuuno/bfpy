@@ -1,7 +1,7 @@
 __all__ = ["IoError", "ByteInputStream", "ByteOutputStream", "BytesBidirectionalStreamOverTextIo"]
 
 import abc
-import io
+import typing as t
 
 
 class IoError(Exception):
@@ -19,13 +19,13 @@ class ByteOutputStream(metaclass=abc.ABCMeta):
 
 
 class BytesBidirectionalStreamOverTextIo(ByteInputStream, ByteOutputStream):
-    def __init__(self, source: io.TextIOBase) -> None:
+    def __init__(self, source: t.TextIO) -> None:
         self.__source = source
 
     def read(self) -> int:
         char = self.__source.read(1)
         if len(char) == 0:
-            raise IoError("Can not read byte from empty byte input stream")
+            char = '\x00'
 
         byte = ord(char)
         self.__validate_byte(byte)
@@ -41,5 +41,5 @@ class BytesBidirectionalStreamOverTextIo(ByteInputStream, ByteOutputStream):
 
     @staticmethod
     def __validate_byte(byte: int) -> None:
-        if not (0 <= byte < 256):
+        if not (0 <= byte <= 255):
             raise IoError("Byte should be in range [0, 255]")
